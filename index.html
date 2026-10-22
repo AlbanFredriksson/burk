@@ -200,12 +200,19 @@ addEventListener("resize", resize); resize();
 
 // --- Renderloop ---
 const clock = new THREE.Clock();
+const footer = document.querySelector("footer");
 renderer.setAnimationLoop(() => {
   const t = clock.getElapsedTime();
   const narrow = innerWidth <= 760;   // samma gräns som CSS
   outer.position.set(state.x * xFactor, state.y + (narrow ? state.ny : 0), 0);
   outer.rotation.set(state.rx, state.ry, state.rz);
   outer.scale.setScalar(state.s * (narrow ? state.ns : 1));
+
+  // Följ med sidan uppåt när sidfoten scrollar in
+  const ft = footer.getBoundingClientRect().top;
+  const over = Math.max(0, innerHeight - ft);
+  const visH = 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+  outer.position.y += over / innerHeight * visH;
 
   tilt.x += (mouse.y * 0.25 - tilt.x) * 0.05;
   tilt.y += (mouse.x * 0.35 - tilt.y) * 0.05;
