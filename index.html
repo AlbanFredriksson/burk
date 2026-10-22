@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drick Den</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#ff7a2f; --orange-d:#e8601a; --blue:#0026a8; --blue-m:#2752ff; --sky:#8cc5ff;
+  --cream:#fff6ec; --brown:#6b2a08;
+  --display:"Bagel Fat One",system-ui,sans-serif; --mono:"Space Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{background:var(--orange);color:var(--blue);font-family:var(--mono);overflow-x:hidden;transition:background-color .6s ease}
+#can{position:fixed;inset:0;width:100vw;height:100vh;z-index:2;pointer-events:none}
+header{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:20px clamp(16px,4vw,48px)}
+.logo{font-family:var(--display);font-size:22px;letter-spacing:.02em;color:var(--blue);text-decoration:none;transition:color .4s ease}
+body.dark .logo{color:var(--orange)}
+body.dark header .btn{background:var(--orange);color:var(--blue)}
+.btn{font-family:var(--mono);font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.06em;background:var(--blue);color:var(--cream);border:0;border-radius:999px;padding:12px 22px;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .2s ease,background-color .2s ease}
+.btn:hover{transform:translateY(-2px) rotate(-2deg);background:var(--blue-m)}
+section{position:relative;min-height:100vh;display:flex;align-items:center;padding:0 clamp(16px,6vw,96px);z-index:1}
+.hero{justify-content:center;text-align:center;flex-direction:column}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(84px,21vw,340px);line-height:.82;color:var(--blue);letter-spacing:-.01em;user-select:none}
+.hero .eyebrow{font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:13px;margin-bottom:18px;color:var(--brown)}
+.hero .sub{font-family:var(--display);font-size:clamp(22px,3vw,34px);color:var(--cream);margin-top:22px}
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brown);display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-hint i{width:2px;height:38px;background:currentColor;opacity:.5;animation:drip 1.6s ease-in-out infinite;transform-origin:top}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.copy{max-width:520px}
+.copy h2{font-family:var(--display);font-weight:400;font-size:clamp(56px,9vw,132px);line-height:.9;margin-bottom:24px}
+.copy p{font-size:clamp(15px,1.3vw,18px);line-height:1.65;max-width:42ch}
+.right{justify-content:flex-end}
+.tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.tags span{border:2px solid currentColor;border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.s-fett{color:var(--orange)} .s-fett p{color:var(--cream)}
+.s-inga{color:var(--blue)}
+.s-bara{justify-content:center;text-align:center;flex-direction:column}
+.s-bara h2{font-family:var(--display);font-weight:400;font-size:clamp(64px,13vw,200px);line-height:.85;color:var(--blue)}
+.s-bara .top{position:absolute;top:14vh;left:0;right:0}
+.s-bara .bottom{position:absolute;bottom:12vh;left:0;right:0}
+.s-bara .btn{font-size:16px;padding:16px 30px}
+footer{position:relative;z-index:3;background:var(--blue);color:var(--cream);padding:72px clamp(16px,6vw,96px) 40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
+footer .big{font-family:var(--display);font-size:clamp(48px,8vw,110px);line-height:.9;color:var(--orange)}
+footer .fine{font-size:13px;line-height:1.7;opacity:.85;max-width:44ch;justify-self:end}
+footer small{grid-column:1/-1;font-size:12px;opacity:.6;border-top:1px solid rgba(255,246,236,.2);padding-top:20px}
+#loader{position:fixed;inset:0;z-index:10;display:grid;place-items:center;background:var(--orange);font-family:var(--display);font-size:28px;color:var(--blue);transition:opacity .6s ease}
+#loader.done{opacity:0;pointer-events:none}
+@media (max-width:760px){
+  .s-fett,.s-inga{align-items:flex-end;padding-bottom:12vh}
+  .right{justify-content:flex-start}
+  .copy h2{margin-bottom:14px}
+  footer{grid-template-columns:1fr}
+  footer .fine{justify-self:start}
+}
+</style>
+</head>
+<body>
+<div id="loader">Öppnar burken…</div>
+<canvas id="can"></canvas>
+
+<header>
+  <a class="logo" href="#">Drick Den</a>
+  <a class="btn" href="#bara">Drick den nu</a>
+</header>
+
+<main id="story">
+  <section class="hero">
+    <p class="eyebrow">Ny läsk · 33 cl · inga konstigheter</p>
+    <h1>DRICK<br>DEN</h1>
+    <p class="sub">Drick den nu</p>
+    <div class="scroll-hint">Scrolla<i></i></div>
+  </section>
+
+  <section class="s-fett" data-bg="#0026a8">
+    <div class="copy reveal">
+      <h2>Fett<br>gott.</h2>
+      <p>Apelsin, bubblor och absolut ingen dold agenda. Det smakar precis som det ser ut – fast godare.</p>
+    </div>
+  </section>
+
+  <section class="s-inga right" data-bg="#8cc5ff">
+    <div class="copy reveal">
+      <h2>Inga konstig&shy;heter.</h2>
+      <p>Inga hemliga ingredienser, inga krångliga löften. Bara en kall burk som vill bli öppnad.</p>
+      <div class="tags"><span>33 cl</span><span>Kolsyrad</span><span>Kall är bäst</span></div>
+    </div>
+  </section>
+
+  <section class="s-bara" id="bara" data-bg="#ff7a2f">
+    <h2 class="top reveal">Drick den</h2>
+    <div class="bottom reveal"><a class="btn" href="#">Drick den nu</a></div>
+  </section>
+</main>
+
+<footer>
+  <div class="big">bara.</div>
+  <p class="fine">Vi ansvarar inte för eventuella biverkningar eller hälsoeffekter som kan uppstå vid konsumtion av denna dryck. Konsumenten dricker produkten helt på eget ansvar och uppmanas att följa den rekommenderade doseringen (inget alls).</p>
+  <small>© Drick Den</small>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+gsap.registerPlugin(ScrollTrigger);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// --- Renderer, scen, kamera ---
+const canvas = document.getElementById("can");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(28, 1, 0.01, 10);
+camera.position.set(0, 0, 0.75);
+
+const key = new THREE.DirectionalLight(0xfff1e0, 2.2); key.position.set(0.6, 0.8, 1); scene.add(key);
+const rim = new THREE.DirectionalLight(0x8cc5ff, 3.0); rim.position.set(-1, 0.4, -0.8); scene.add(rim);
+
+// outer = scroll, inner = svaj + mus
+const outer = new THREE.Group(), inner = new THREE.Group();
+outer.add(inner); scene.add(outer);
+
+// --- Ladda burken ---
+const draco = new DRACOLoader().setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.7/");
+new GLTFLoader().setDRACOLoader(draco).load("laskburk.glb", (gltf) => {
+  const model = gltf.scene;
+  const box = new THREE.Box3().setFromObject(model);
+  model.position.sub(box.getCenter(new THREE.Vector3()));
+  model.traverse(o => { if (o.isMesh) o.material.envMapIntensity = 1.1; });
+  inner.add(model);
+  document.getElementById("loader").classList.add("done");
+  gsap.from(inner.scale, { x:.6, y:.6, z:.6, duration:1.4, ease:"elastic.out(1,.6)" });
+  gsap.from(inner.rotation, { y:-Math.PI, duration:1.6, ease:"power3.out" });
+}, undefined, (e) => { document.getElementById("loader").textContent = "Kunde inte ladda burken"; console.error(e); });
+
+// --- Scrollstyrd rörelse ---
+const TAU = Math.PI * 2;
+const state = { x:0, y:-0.01, rx:0.15, ry:-0.5, rz:-0.08, s:1, ny:0, ns:1 };
+const tl = gsap.timeline({
+  defaults:{ ease:"power2.inOut", duration:1 },
+  scrollTrigger:{ trigger:"#story", start:"top top", end:"bottom bottom", scrub:1.2 }
+});
+tl.to(state, { x: 0.13, y:0,     rx:0.05, ry: TAU + 0.4,   rz: 0.12, s:1.35, ny:0.05, ns:0.8 })   // Fett gott
+  .to(state, { x:-0.13, y:0,     rx:0.55, ry: 2*TAU - 0.3, rz:-0.15, s:1.2, ny:0.055, ns:0.8 })    // Inga konstigheter
+  .to(state, { x: 0,    y:-0.005,rx:0.05, ry: 3*TAU,       rz: 0,    s:1.7, ny:0, ns:1 });   // Drick den bara
+
+// Bakgrundsfärg per sektion
+function setBg(c){ document.body.style.backgroundColor = c; document.body.classList.toggle("dark", c === "#0026a8"); }
+const bgs = [["#ff7a2f", ".hero"], ...[...document.querySelectorAll("[data-bg]")].map(s => [s.dataset.bg, s])];
+bgs.forEach(([c, el], i) => {
+  ScrollTrigger.create({ trigger: el, start: "top 55%", end: "bottom 55%",
+    onEnter: () => setBg(c),
+    onEnterBack: () => setBg(c) });
+});
+
+// Text som glider in
+document.querySelectorAll(".reveal").forEach(el => {
+  gsap.from(el, { y:60, opacity:0, duration:1, ease:"power3.out",
+    scrollTrigger:{ trigger:el, start:"top 95%", toggleActions:"play none none reverse" } });
+});
+
+// --- Mus-tilt ---
+const mouse = { x:0, y:0 }, tilt = { x:0, y:0 };
+addEventListener("pointermove", e => {
+  mouse.x = e.clientX / innerWidth - 0.5;
+  mouse.y = e.clientY / innerHeight - 0.5;
+});
+
+// --- Storlek ---
+let xFactor = 1;
+function resize(){
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+  xFactor = Math.min(1, camera.aspect / 1.5);
+}
+addEventListener("resize", resize); resize();
+
+// --- Renderloop ---
+const clock = new THREE.Clock();
+renderer.setAnimationLoop(() => {
+  const t = clock.getElapsedTime();
+  const narrow = innerWidth <= 760;   // samma gräns som CSS
+  outer.position.set(state.x * xFactor, state.y + (narrow ? state.ny : 0), 0);
+  outer.rotation.set(state.rx, state.ry, state.rz);
+  outer.scale.setScalar(state.s * (narrow ? state.ns : 1));
+
+  tilt.x += (mouse.y * 0.25 - tilt.x) * 0.05;
+  tilt.y += (mouse.x * 0.35 - tilt.y) * 0.05;
+  const sway = reduce ? 0 : 1;
+  inner.position.y = Math.sin(t * 1.1) * 0.004 * sway;
+  inner.rotation.x = tilt.x + Math.sin(t * 0.7) * 0.03 * sway;
+  inner.rotation.z = Math.sin(t * 0.9) * 0.02 * sway;
+  if (!gsap.isTweening(inner.rotation)) inner.rotation.y = tilt.y;
+
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>
